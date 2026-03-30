@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { getBudgets, upsertBudget, deleteBudget } from '../controllers/budgetController';
-import { authenticate } from '../middleware/auth';
+import { getBudgetSummary, upsertBudget, upsertCategoryBudget, deleteCategoryBudget } from '../controllers/budgetController';
+import { authenticate, requireAdmin } from '../middleware/auth';
 
 const router = Router();
-
 router.use(authenticate);
 
-router.get('/', getBudgets);
-router.put('/', upsertBudget);
-router.delete('/:id', deleteBudget);
+router.get('/summary', getBudgetSummary);
+router.post('/', requireAdmin, upsertBudget);
+router.post('/category', requireAdmin, upsertCategoryBudget);
+router.delete('/category/:id', requireAdmin, deleteCategoryBudget);
 
 export default router;
