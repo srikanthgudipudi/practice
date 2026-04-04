@@ -1,0 +1,49 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="app-icon">account_balance</mat-icon>
+      <span class="app-title">Finance Tracker</span>
+    </div>
+
+    <mat-divider />
+
+    <mat-nav-list>
+      @for (item of visibleNav; track item.route) {
+        <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider />
+      <div class="role-toggle" (click)="switchRole()">
+        <mat-icon>swap_horiz</mat-icon>
+        <span>{{ auth.isAdmin() ? 'Switch to User' : 'Switch to Admin' }}</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span class="toolbar-spacer"></span>
+      <mat-chip [highlighted]="true" class="role-chip">
+        {{ auth.user()?.active_role }}
+      </mat-chip>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

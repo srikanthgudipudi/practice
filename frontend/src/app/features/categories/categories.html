@@ -1,0 +1,66 @@
+<div class="page-header">
+  <h1>Categories</h1>
+  <button mat-flat-button (click)="openNew()"><mat-icon>add</mat-icon> Add Category</button>
+</div>
+
+@if (showForm) {
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ editing ? 'Edit' : 'New' }} Category</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="save()" class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Icon (Material icon name)</mat-label>
+          <input matInput formControlName="icon" />
+          <mat-icon matSuffix>{{ form.value.icon }}</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Color</mat-label>
+          <input matInput formControlName="color" type="color" />
+        </mat-form-field>
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancelForm()">Cancel</button>
+          <button mat-flat-button type="submit" [disabled]="form.invalid">Save</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
+
+<mat-card>
+  <table mat-table [dataSource]="categories" class="full-width">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let c">
+        <div class="cat-name">
+          <mat-icon [style.color]="c.color">{{ c.icon }}</mat-icon>
+          {{ c.name }}
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="icon">
+      <th mat-header-cell *matHeaderCellDef>Icon</th>
+      <td mat-cell *matCellDef="let c">{{ c.icon }}</td>
+    </ng-container>
+    <ng-container matColumnDef="default">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let c">
+        <mat-chip>{{ c.is_default ? 'Default' : 'Custom' }}</mat-chip>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let c">
+        <button mat-icon-button (click)="openEdit(c)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="delete(c)" [disabled]="c.is_default"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>

@@ -1,0 +1,48 @@
+<div class="page-header">
+  <h1>Alert Configuration</h1>
+  <button mat-flat-button (click)="openNew()"><mat-icon>add</mat-icon> Add Alert</button>
+</div>
+
+@if (showForm) {
+  <mat-card class="form-card">
+    <mat-card-header><mat-card-title>New Alert</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="save()" class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Alert Type</mat-label>
+          <mat-select formControlName="type">
+            @for (t of alertTypes; track t) { <mat-option [value]="t">{{ typeLabel(t) }}</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Threshold (% or Amount)</mat-label>
+          <input matInput type="number" formControlName="threshold_value" />
+        </mat-form-field>
+        @if (form.value.type === 'CATEGORY_THRESHOLD') {
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category_id">
+              @for (c of categories; track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+        }
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">Cancel</button>
+          <button mat-flat-button type="submit" [disabled]="form.invalid">Save</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
+
+<mat-card>
+  <table mat-table [dataSource]="configs" class="full-width">
+    <ng-container matColumnDef="type"><th mat-header-cell *matHeaderCellDef>Type</th><td mat-cell *matCellDef="let a"><mat-chip>{{ typeLabel(a.type) }}</mat-chip></td></ng-container>
+    <ng-container matColumnDef="threshold"><th mat-header-cell *matHeaderCellDef>Threshold</th><td mat-cell *matCellDef="let a">{{ a.threshold_value }}{{ a.type !== 'LARGE_TRANSACTION' ? '%' : '' }}</td></ng-container>
+    <ng-container matColumnDef="category"><th mat-header-cell *matHeaderCellDef>Category</th><td mat-cell *matCellDef="let a">{{ a.category_name || '—' }}</td></ng-container>
+    <ng-container matColumnDef="active"><th mat-header-cell *matHeaderCellDef>Active</th><td mat-cell *matCellDef="let a"><mat-slide-toggle [checked]="a.is_active" (change)="toggle(a)" /></td></ng-container>
+    <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th><td mat-cell *matCellDef="let a"><button mat-icon-button color="warn" (click)="delete(a)"><mat-icon>delete</mat-icon></button></td></ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>

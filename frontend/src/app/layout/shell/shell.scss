@@ -1,0 +1,48 @@
+.shell-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+
+  .app-icon { font-size: 28px; width: 28px; height: 28px; }
+  .app-title { font-size: 1.1rem; font-weight: 600; }
+}
+
+.sidenav-footer {
+  margin-top: auto;
+  .role-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    &:hover { background: var(--mat-sys-surface-container-high); }
+  }
+}
+
+.active-link {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  border-radius: 28px;
+}
+
+.toolbar-spacer { flex: 1; }
+
+.role-chip { margin-right: 8px; font-size: 0.75rem; }
+
+.content {
+  padding: 24px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
